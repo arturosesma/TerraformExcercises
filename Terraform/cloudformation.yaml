@@ -1,0 +1,98 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Plantilla de ejemplo - equivalente al proyecto de Terraform visto en la guia.
+  Crea una VPC, una subnet publica y una instancia EC2.
+
+# ============================================================
+# PARAMETERS  →  equivalente a "variables.tf" en Terraform
+# ============================================================
+Parameters:
+  Environment:
+    Type: String
+    Description: Entorno (dev, staging, prod)
+    Default: dev
+
+  InstanceType:
+    Type: String
+    Description: Tipo de instancia EC2
+    Default: t2.micro
+
+  VpcCidr:
+    Type: String
+    Description: CIDR block para la VPC
+    Default: 10.0.0.0/16
+
+  DBPassword:
+    Type: String
+    Description: Password de la base de datos
+    NoEcho: true   # equivalente a "sensitive = true" en Terraform
+
+# ============================================================
+# RESOURCES  →  equivalente a "main.tf" + el modulo de VPC
+# ============================================================
+Resources:
+
+  # --- Lo que en Terraform era el modulo "vpc" ---
+  RedPrincipal:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      Tags:
+        - Key: Name
+          Value: !Sub "vpc-${Environment}"
+
+  SubnetPublica:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RedPrincipal
+      CidrBlock: !Select [0, !Cidr [!Ref VpcCidr, 1, 8]]
+      Tags:
+        - Key: Name
+          Value: !Sub "subnet-publica-${Environment}"
+
+  # --- Internet Gateway (en Terraform tendrias que declararlo igual de explicito) ---
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AdjuntarIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref RedPrincipal
+      InternetGatewayId: !Ref InternetGateway
+
+  # --- El recurso principal: la instancia EC2 ---
+  ServidorApp:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref SubnetPublica
+      Tags:
+        - Key: Name
+          Value: !Sub "servidor-${Environment}"
+        - Key: Environment
+          Value: !Ref Environment
+
+  # --- Base de datos RDS ---
+  BaseDatos:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Sub "db-${Environment}"
+      Engine: mysql
+      DBInstanceClass: db.t3.micro
+      AllocatedStorage: 20
+      MasterUsername: admin
+      MasterUserPassword: !Ref DBPassword
+      DeletionProtection: false
+
+# ============================================================
+# OUTPUTS  →  equivalente a "outputs.tf" en Terraform
+# ============================================================
+Outputs:
+  InstanceIP:
+    Description: IP publica del servidor
+    Value: !GetAtt ServidorApp.PublicIp
+
+  VpcId:
+    Description: ID de la VPC creada
+    Value: !Ref RedPrincipal
