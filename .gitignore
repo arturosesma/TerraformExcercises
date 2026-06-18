@@ -1,0 +1,132 @@
+# Ignore Terraform local state, caches and provider binaries everywhere# Terraform state and lock files — never commit
+
+# Ignore any .terraform directory in the repoTerraform/.terraform/
+
+.terraform/Terraform/*.tfstate
+
+**/.terraform/Terraform/*.tfstate.*
+
+Terraform/.terraform.lock.hcl
+
+# Terraform state and lock files
+
+*.tfstate# Variable files that contain secrets
+
+*.tfstate.*Terraform/terraform.tfvars
+
+.terraform.lock.hclTerraform/*.auto.tfvars
+
+
+
+# Variable files that may contain secrets# Crash logs
+
+terraform.tfvarsTerraform/crash.log
+
+*.auto.tfvarsTerraform/crash.*.log
+
+
+
+# Generated plan files# Generated plan files
+
+*.tfplanTerraform/*.tfplan
+
+
+
+# Override filesTerraform/terraform.tfvars
+
+override.tfTerraform/*.auto.tfvars
+
+override.tf.json
+
+*_override.tf# Crash logs
+
+*_override.tf.jsonTerraform/crash.log
+
+Terraform/crash.*.log
+
+# Crash logs
+
+crash.log# Generated plan files
+
+crash.*.logTerraform/*.tfplan
+
+
+
+# macOS# Override files
+
+.DS_StoreTerraform/override.tf
+
+Terraform/override.tf.json
+
+# Keep the workspace clean: ignore provider binaries and modulesTerraform/*_override.tf
+
+**/.terraform/providers/Terraform/*_override.tf.json
+
+**/.terraform/modules/
+
+*.zip# macOS
+
+Terraform/.DS_Store
+
+Terraform/terraform.tfvars
+Terraform/*.auto.tfvars
+
+# Crash logs
+Terraform/crash.log
+Terraform/crash.*.log
+
+# Generated plan files
+Terraform/*.tfplan
+
+# Override files
+Terraform/override.tf
+Terraform/override.tf.json
+Terraform/*_override.tf
+Terraform/*_override.tf.json
+
+# macOS
+Terraform/.DS_Store
+
+# Terraform state and lock files — never commit
+Ejercicio1/.terraform/
+Ejercicio1/*.tfstate
+Ejercicio1/*.tfstate.*
+Ejercicio1/.terraform.lock.hcl
+
+# Variable files that contain secrets
+Ejercicio1/terraform.tfvars
+Ejercicio1/*.auto.tfvars
+
+# Crash logs
+Ejercicio1/crash.log
+Ejercicio1/crash.*.log
+
+# Generated plan files
+Ejercicio1/*.tfplan
+
+# Override files
+Ejercicio1/override.tf
+Ejercicio1/override.tf.json
+Ejercicio1/*_override.tf
+Ejercicio1/*_override.tf.json
+
+# macOS
+Ejercicio1/.DS_Store
+Ejercicio1/terraform.tfvars
+Ejercicio1/*.auto.tfvars
+
+# Crash logs
+Ejercicio1/crash.log
+Ejercicio1/crash.*.log
+
+# Generated plan files
+Ejercicio1/*.tfplan
+
+# Override files
+Ejercicio1/override.tf
+Ejercicio1/override.tf.json
+Ejercicio1/*_override.tf
+Ejercicio1/*_override.tf.json
+
+# macOS
+Ejercicio1/.DS_Store
